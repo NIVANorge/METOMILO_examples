@@ -1,0 +1,6 @@
+---
+title: "index"
+output: html_document
+---
+
+[example effect distances](./example_effect_distances)
