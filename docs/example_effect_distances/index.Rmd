@@ -128,11 +128,15 @@ effect_dist <- 5000 # meters
 
 ### Calculate distances
 
-The pressure intensity in each raster cell will be calculated as a
-function of its distance from the source of the pressure.
+The pressure intensity in each raster cell will be calculated as a fraction _f_
+of the intensity at the source point, which is a function of distance 
+from the source of the pressure.
 
-If the distance from a source exceeds the effect distance `effect_dist`
-(*`r effect_dist` m*) then the value will be set to zero.
+So we first calculate the distance from the source point. Then we check if the 
+distance exceeds the effect distance `effect_dist` (*`r effect_dist` m*). 
+
+In this case, we exclude the cells from our calculations. The factor _f_ and 
+thus the intensity in these cells will be set to zero.
 
 ```{r distances}
 
@@ -262,8 +266,6 @@ rp <- r
 terra::values(rp) <- rpts_all$value
 
 
-terra::writeRaster(rp, filename = "example_effect_distances.tif", overwrite=T)
-
 ```
 
 ### Plot the results 
@@ -299,3 +301,37 @@ p1 + p2 + p3 +
   plot_layout(design = layout) #, guides="collect")
 
 ```
+
+### Saving results as csv
+
+```{r save_csv}
+
+# create a dataframe with all values from the raster including NAs
+df <- rp %>%
+  terra::values(na.rm=F) %>%
+  as.data.frame() 
+names(df) <- "value"
+  
+# create a dataframe with all x,y coordinate from the raster 
+# and join it to the values
+df <- rp %>%
+  terra::xyFromCell(1:ncell(rp)) %>%
+  as.data.frame() %>%
+  bind_cols(df)
+
+# filter to keep only x,y,value where value is not NA
+df <- df %>%
+  filter(!is.na(value))
+
+
+filename <- "example_effect_distances.csv"
+
+# save the x,y,value data as csv 
+write.table(df, file=filename, sep=",", quote = F,
+            fileEncoding = "UTF-8", row.names=F)
+
+
+
+```
+
+
