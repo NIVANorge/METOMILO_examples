@@ -31,7 +31,7 @@ That is, grid cells classified as land which really should be water were
 manually identified and reclassified. Conversely some grid cells
 classified as land were changed to land.
 
-```{r raster}
+```{r raster, message=FALSE, warning=FALSE}
 
 folder <- "C:/Users/CJM/OneDrive - NIVA/_repositories/METOMILO/grid_v3/raster/"
 file_r <- "Sunnhordaland_5109_02.tif"
