@@ -2,7 +2,7 @@
 title: "example_effect_distances.R"
 author: "Ciaran Murray"
 date: "2025-01-24"
-output: html_document
+output: github_document
 editor_options: 
   markdown: 
     wrap: 72
